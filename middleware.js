@@ -3,8 +3,10 @@ import { NextResponse } from 'next/server';
 export function middleware(request) {
   const response = NextResponse.next();
   
-  // Add security headers
-  response.headers.set('X-Frame-Options', 'DENY');
+  // Add security headers (skip X-Frame-Options in dev to allow preview embedding)
+  if (process.env.NODE_ENV === 'production') {
+    response.headers.set('X-Frame-Options', 'DENY');
+  }
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   
